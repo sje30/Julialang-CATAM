@@ -9,6 +9,10 @@ We aim to develop resources not only for Cambridge undergraduates, but those tha
 
 [Matlab guide](https://www.maths.cam.ac.uk/undergrad/catam/files/booklet.pdf)
 
+# Mailing list
+We have a mailing list for open discussion <https://lists.cam.ac.uk/mailman/listinfo/maths-julialang>
+
+
 # Useful resources
 
 [David Sander's current Julia course](https://github.com/dpsanders/6.S083)
