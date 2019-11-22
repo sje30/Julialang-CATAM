@@ -1,4 +1,6 @@
 # Julialang-CATAM
+![coverphoto][coverphoto]
+
 Developing Julia language resources for CATAM
 
 This repository collects our work starting in 2019 to develop Julia resources for the CATAM module in mathematics.
