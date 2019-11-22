@@ -1,5 +1,5 @@
 # Julialang-CATAM
-![coverphoto][coverphoto]
+![coverphoto][coverphoto.jpg]
 
 Developing Julia language resources for CATAM
 
