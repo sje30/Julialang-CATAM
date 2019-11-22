@@ -88,3 +88,11 @@ comparenumbers(1, 0)
 comparenumbers(0, 1)
 ```
 
+
+## Suggestions
+* better if loop examples: is this a leap year? prime number? HOTPO Collatz Conjecture. https://en.wikipedia.org/wiki/Collatz_conjecture
+* list comprehensions
+* generator (for loops) -- why is it memory efficient?
+* collect: turns generator into vector (can work with plots?)
+* Monte Carlo to estimate pi. Can we do it with generator? But it's slow. It's one of the original chapters.
+* Efficient series convergence.j
