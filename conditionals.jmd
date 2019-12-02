@@ -1,21 +1,65 @@
 # Control flow
 
-## Conditional evaluation
-Evaluate pieces of code, depending on whether a Boolean expression is true or false.
+## Introduction to the Collatz Conjecture
+https://en.wikipedia.org/wiki/Collatz_conjecture
 
-```
-x = 10
+Paul Erdős said about the Collatz conjecture: 
+"Mathematics may not be ready for such problems".
 
-if x > 0
-	println("x is greater than zero")
+Give an example with 7.
+
+## Let's get coding: Control flow
+Control flow: the order in which individual statements, instructions or function calls 
+of an imperative program are executed or evaluated.
+
+For this problem, we can use the remainder `%` function within an `if` loop (conditional evaluation).
+```julia
+x = 7  # let's start with seven
+
+if x % 2 == 0
+	x / 2   # even
 else
-	println("x is not greater than zero")
+	3x + 1  # odd
 end
 ```
 
-Introduce `elseif`:
-
+More concisely. the only operator in most language taking three operands. Ternary operator.
+```julia
+x%2==0 ? x/2 : 3x+1
 ```
+
+We want this operation to keep on going until we reach one. 
+Wrap the above in a `while` loop (repeated evaluation).
+
+```julia
+function collatzConjecture(x)
+	while x != 1
+		x = x%2==0 ? x/2 : 3x+1
+		println(x)
+	end
+end
+
+collatzConjecture(7)
+```
+
+Scoping. Can update parent scope (but parent scope cannot access local variable).
+```julia
+function collatzConjectureCount(x)
+	count = 0
+	while x != 1
+		x = x%2==0 ? x/2 : 3x+1
+		count += 1
+	end
+	return count
+end
+
+collatzConjectureCount(7)
+```
+
+
+## Side Notes
+`elseif`
+```julia
 x = 10
 
 if x > 0
@@ -27,24 +71,22 @@ else
 end
 ```
 
-## Ternary operator
-the only operator in most language taking three operands
-```
-# a ? b : c
 
-x > 0 ? "greater than zero" : "not greater than zero"
 
-begin
-	x > 0 ? "greater than zero" : 
-	x < 0 ? "not greater than zero" : "is zero"
-end
-```
+
+
+
+
+
+
+
+
 
 ## Notes about scoping
 
 if is "leaky". Notice how the `relation` variable can be used outside the `if`blocj where it was declared.
 
-```
+```julia
 x = -1
 
 if x > 0
@@ -58,7 +100,7 @@ println("x is ", relation)
 
 ### Exercise: debug this
 The following code gives a runtime error.
-```
+```julia
 z = 0
 
 if z > 0
@@ -78,7 +120,7 @@ This leaky behaviour is not the case for `for`, `while` and `try`, which introdu
 
 
 ## Exercise: three ways of writing the same thing
-```
+```julia
 function comparenumbers(x::Int, y::Int) {
 	# replace this comment
 }
