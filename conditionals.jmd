@@ -1,21 +1,33 @@
 # Control flow
 
-## Introduction to the Collatz Conjecture
-https://en.wikipedia.org/wiki/Collatz_conjecture
+## Problem statement: Collatz conjecture
+Consider the following operation on a **postive integer**:
+* If the number is even, divide by two.
+* If the number is odd, multiply by three and add one.
 
-Paul Erdős said about the Collatz conjecture: 
-"Mathematics may not be ready for such problems".
+Form a sequence by repeating this operation, using the result of each step as the input of the next.
 
-Give an example with 7.
+Here's an example with the number 6. It reaches one after.
+ 
+The Collatz conjecture states that: 
+*This process will eventually reach one, regardless of the initial positive integer.*
 
-## Let's get coding: Control flow
-Control flow: the order in which individual statements, instructions or function calls 
-of an imperative program are executed or evaluated.
+Eccentric Hungarian mathematician Paul Erdős once said about the conjecture: 
+"Mathematics may not be ready for such problems", and offered US\$500 for its solution.
+As of 2017, the conjecture has been checked by computers to hold true 
+for starting values up to $87 x 2^{60}$.
 
-For this problem, we can use the remainder `%` function within an `if` loop (conditional evaluation).
+## Introduction to control flow
+Despite the challenges to obtain a mathematical proof,
+the Collatz conjecture is a useful problem to learn basic control flow in Julia.
+**Control flow** concerns the order in which individual lines of code within a program are executed.
+
+### Conditional evaluation
+For this problem, we want our program to perform different operations depending on
+whether the integer is currently positive or negative.
+We can achieve this behaviour using the `if-else` conditional syntax:
 ```julia
 x = 7  # let's start with seven
-
 if x % 2 == 0
 	x / 2   # even
 else
@@ -23,12 +35,13 @@ else
 end
 ```
 
-More concisely. the only operator in most language taking three operands. Ternary operator.
+This can be written as a one-liner using the **ternary operator**.
 ```julia
 x%2==0 ? x/2 : 3x+1
 ```
 
-We want this operation to keep on going until we reach one. 
+### Repeated evaluation
+Obviously, we want the above operation to continue until we reach one.
 Wrap the above in a `while` loop (repeated evaluation).
 
 ```julia
