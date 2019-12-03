@@ -1,5 +1,4 @@
 # Control flow
-
 ## Problem statement: Collatz conjecture
 Consider the following operation on a **postive integer**:
 * If the number is even, divide by two.
@@ -66,7 +65,7 @@ We initialise its value as `1` right before the `while` loop, update it by one (
 and print its final value when the loop exits.
 
 ```julia
-function collatzConjectureWithCounter(x)
+function collatzConjectureWithCounter(x::Int64)
 	@printf "starting number is %.0f\n\n" x
 	counter = 1
 	while x != 1
@@ -91,7 +90,7 @@ and thus cannot be accessed by the parent.
 ### Repeated evaluation: for
 Let's rewrite the function so that only the stopping time (i.e. the final value of `counter`) is returned.
 ```julia
-function collatzConjectureFinalCount(x)
+function collatzConjectureFinalCount(x::Int64)
 	@assert x > 0 "x should be a positive integer!"
 	counter = 1
 	while x != 1
@@ -113,9 +112,7 @@ end
 
 A neat one-liner to gather all these values in an Array is by a **list comprehension**:
 ```julia
-counts = [collatzConjectureFinalCount(i) for i in 1:20]
-#maximum(g)
-#findall(g .== maximum(g))
+counts = [collatzConjectureFinalCount(i) for i in 1:20];
 ```
 
 The maximum stopping time for the first twenty numbers is `maximum(counts)= ` `j maximum(counts)`,
@@ -126,24 +123,73 @@ In a later section, you will learn how to visualise the distribution of stopping
 ### Exercises
 1. What is the stopping time for an initial value of 1?
 2. If we were to allow the sequence to proceed even after reaching one, what would happen?
-3. Suppose we modify the operations such that when we reach an odd number, we do $3x-1$ instead of plus one.
+3. Suppose we modify the operations such that when we reach an odd number, we do $3x-1$ (instead of plus one).
    What happens? Try this for initial values 1, 3 and 9.
    You can modify the code above (hint: use Ctrl+C to halt a program if necessary).
 
 ## More advanced control flow
-Building from Question 3 in the exercises, one will notice that the 
+From Question 3, one noticed that if the rule is modified such that
+we do $3x-1$ (instead of plus one) when reaching an odd number,
+there are certain initial values which do not reach one and get trapped in a cycle.
+An example is 9:
 
-`break` with `while` to stop things from running forever
+$ 7,20,10,5,14,7,... $
 
-`continue`
+If we simply modify the `3x+1` to `3x-1` in the `collatzConjecture` function and run it,
+the loop will run forever for these initial values because it never reaches one.
+A never halting program is not the coolest thing to have,
+so let's rewrite the function so that loop stops after a fixed number of iterations (set as 25 here).
+Here we use the `break` keyword in an `if` statement to terminate the `while` loop,
+so that it does not run forever.
 
-### Exercise
-from 1 to 20, which numbers manage to reach one?
+```julia
+function collatzConjectureWithCounterModified(x::Int64)
+	@printf "starting number is %.0f\n\n" x
+	counter = 1
+	while x != 1
+		if counter > 25
+			@printf "\nthe number 1 is not reached after 25 iterations, final term is %.0f" x
+			break
+		end
+		@printf "term %.0f: %.0f\n" counter x
+		x = x%2==0 ? x/2 : 3x-1
+		counter += 1
+	end
+end
 
-`@assert` should be introuced here, instead of above.
+collatzConjectureWithCounterModified(9)
+```
+
+*Exercise:* How many numbers from 1 to 20 manage to reach one using the modified rule?
+Tip: use a conditional statement to return True/False near the end of the function.
+
+Those who are eagle-eyed would also notice that the original `collatzConjecture`
+would loop forever if given zero or a negative number.
+Ideally, we wouldn't want this function to run if the input were a negative integer.
+t should throw an **exception** and print an error message.
+We achieve this with the `@assert` macro.
+
+```julia
+function collatzConjectureWithAssert(x::Int64)
+	@assert x > 0 "please give a positive integer"
+	@printf "starting number is %.0f\n\n" x
+	while x != 1
+		@printf "%.0f\n" x
+		x = x%2==0 ? x/2 : 3x+1
+	end
+	@printf "1\n"
+end
+
+collatzConjectureWithAssert(-6)
+```
 
 ## Miscellaneous
-`elseif`
+Could include these, or not if this is already too long.
+
+1. elseif
+2. short circuit evaluation
+3. if is leaky, unlike while and for and try
+
 ```julia
 x = 10
 
@@ -170,19 +216,6 @@ println("x is ", statement)
 ```
 
 Solution: you need a `else sign = "zero"`, because all possible code paths must define a value for the variable.
-
-Short circuit evaluation
-
-3 ways of writing the same thing.
-
-
-## Other potential ideas
-* better if loop examples: is this a leap year? prime number? HOTPO Collatz Conjecture. https://en.wikipedia.org/wiki/Collatz_conjecture
-* list comprehensions
-* generator (for loops) -- why is it memory efficient?
-* collect: turns generator into vector (can work with plots?)
-* Monte Carlo to estimate pi. Can we do it with generator? But it's slow. It's one of the original chapters.
-* Efficient series convergence.j
 
 if is "leaky". Notice how the `relation` variable can be used outside the `if`blocj where it was declared.
 
