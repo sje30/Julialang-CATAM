@@ -51,7 +51,7 @@ To tidy things up, we wrap everything inside a function that also prints the cur
 
 ```julia
 using Printf
-function collatzConjecture(x::Int64)
+function collatzConjecture(x)
 	@printf "starting number is %.0f\n\n" x
 	while x != 1
 		@printf "%.0f\n" x
@@ -70,7 +70,7 @@ We initialise its value as `1` right before the `while` loop, update it by one (
 and print its final value when the loop exits.
 
 ```julia
-function collatzConjectureWithCounter(x::Int64)
+function collatzConjectureWithCounter(x)
 	@printf "starting number is %.0f\n\n" x
 	counter = 1
 	while x != 1
@@ -95,7 +95,7 @@ and thus cannot be accessed by the parent.
 ## Repeated evaluation: for
 Let's rewrite the function so that only the stopping time (i.e. the final value of `counter`) is returned.
 ```julia
-function collatzConjectureFinalCount(x::Int64)
+function collatzConjectureFinalCount(x)
 	@assert x > 0 "x should be a positive integer!"
 	counter = 1
 	while x != 1
@@ -149,7 +149,7 @@ Here we use the `break` keyword in an `if` statement to terminate the `while` lo
 so that it does not run forever.
 
 ```julia
-function collatzConjectureWithCounterModified(x::Int64)
+function collatzConjectureWithCounterModified(x)
 	@printf "starting number is %.0f\n\n" x
 	counter = 1
 	while x != 1
@@ -178,7 +178,7 @@ t should throw an **exception** and print an error message.
 We achieve this with the `@assert` macro.
 
 ```julia
-function collatzConjectureWithAssert(x::Int64)
+function collatzConjectureWithAssert(x)
 	@assert x > 0 "please give a positive integer"
 	@printf "starting number is %.0f\n\n" x
 	while x != 1
@@ -190,6 +190,12 @@ end
 
 collatzConjectureWithAssert(-6)
 ```
+
+### Exercise
+Try running `collatzConjectureWithAssert` with a floating point number (e.g. 6.6).
+Does the sequence finally reach one?
+Digress to *floating point precision*?
+I'm not sure about this --- maybe just get them to add an assert statement?
 
 # Miscellaneous
 Could include these, or not if this is already too long.
