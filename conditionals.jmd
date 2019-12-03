@@ -32,20 +32,47 @@ We want this operation to keep on going until we reach one.
 Wrap the above in a `while` loop (repeated evaluation).
 
 ```julia
-function collatzConjecture(x)
+using Printf  # load package
+
+function collatzConjecture(x::Int64)
+	@assert x > 0 "x should be a positive integer!"
+	@printf "starting number is %.0f\n\n" x
 	while x != 1
+		@printf "%.0f\n" x
 		x = x%2==0 ? x/2 : 3x+1
-		println(x)
 	end
+	@printf "1\n"
 end
 
 collatzConjecture(7)
 ```
 
 Scoping. Can update parent scope (but parent scope cannot access local variable).
+
+This leaky behaviour is not the case for `for`, `while` and `try`, 
+which introduc new scopes. (see another document?)
+
+```julia
+function collatzConjectureWithTerm(x)
+	@assert x > 0 "x should be a positive integer!"
+	@printf "starting number is %.0f\n\n" x
+	count = 1
+	while x != 1
+		@printf "term %.0f: %.0f\n" count x
+		x = x%2==0 ? x/2 : 3x+1
+		count += 1
+	end
+	@printf "\nfinal term of 1 is reached, stopping time is %.0f\n" count
+end
+
+collatzConjectureWithTerm(7)
+```
+
+for loop
 ```julia
 function collatzConjectureCount(x)
-	count = 0
+	@assert x > 0 "x should be a positive integer!"
+	count = 1
 	while x != 1
 		x = x%2==0 ? x/2 : 3x+1
 		count += 1
@@ -54,10 +81,40 @@ function collatzConjectureCount(x)
 end
 
 collatzConjectureCount(7)
+
+# what is the stopping time for the first 20 numbers?
+for i in 1:20
+	@printf "%.0f, t = %.0f\n" i collatzConjectureCount(i)
+end
 ```
 
+List comprehension method
+```julia
+g = [collatzConjectureCount(i) for i in 1:20]  #generator with collect?
+maximum(g)
+findall(g .== maximum(g))
+```
 
-## Side Notes
+You will learn how to visualise the distribution of this with plots.
+
+### Exercises
+1. What is the stopping time for 1?
+2. If we were to allow the sequence to continue pass one, what happens?
+3. Suppose we modify the conjecture such that when we reach an odd number, we do 3n-1.
+   What happens? Try this for 1, 3 and 9.
+   You can modify the code above and rerun it (hint: use Ctrl+C to halt a program if necessary).
+
+## More advanced control flow
+`break` with `while` to stop things from running forever
+
+`continue`
+
+### Exercise
+from 1 to 20, which numbers manage to reach one?
+
+`@assert` should be introuced here, instead of above.
+
+## Miscellaneous
 `elseif`
 ```julia
 x = 10
@@ -71,34 +128,6 @@ else
 end
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-## Notes about scoping
-
-if is "leaky". Notice how the `relation` variable can be used outside the `if`blocj where it was declared.
-
-```julia
-x = -1
-
-if x > 0
-	relation = "greater than zero"
-else
-	relation = "not greater than zero"
-end
-
-println("x is ", relation)
-```
-
-### Exercise: debug this
 The following code gives a runtime error.
 ```julia
 z = 0
@@ -114,27 +143,29 @@ println("x is ", statement)
 
 Solution: you need a `else sign = "zero"`, because all possible code paths must define a value for the variable.
 
-This leaky behaviour is not the case for `for`, `while` and `try`, which introduc new scopes. (see another document?)
+Short circuit evaluation
 
-## Short circuit evaluation
-
-
-## Exercise: three ways of writing the same thing
-```julia
-function comparenumbers(x::Int, y::Int) {
-	# replace this comment
-}
-
-comparenumbers(1, 1)
-comparenumbers(1, 0)
-comparenumbers(0, 1)
-```
+3 ways of writing the same thing.
 
 
-## Suggestions
+## Other potential ideas
 * better if loop examples: is this a leap year? prime number? HOTPO Collatz Conjecture. https://en.wikipedia.org/wiki/Collatz_conjecture
 * list comprehensions
 * generator (for loops) -- why is it memory efficient?
 * collect: turns generator into vector (can work with plots?)
 * Monte Carlo to estimate pi. Can we do it with generator? But it's slow. It's one of the original chapters.
 * Efficient series convergence.j
+
+if is "leaky". Notice how the `relation` variable can be used outside the `if`blocj where it was declared.
+
+```julia
+x = -1
+
+if x > 0
+	relation = "greater than zero"
+else
+	relation = "not greater than zero"
+end
+
+println("x is ", relation)
+```
