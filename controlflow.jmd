@@ -139,7 +139,7 @@ we do $3x-1$ (instead of plus one) when reaching an odd number,
 there are certain initial values which do not reach one and get trapped in a cycle.
 An example is 9:
 
-$ 7,20,10,5,14,7,... $
+$7,20,10,5,14,7,...$
 
 If we simply modify the `3x+1` to `3x-1` in the `collatzConjecture` function and run it,
 the loop will run forever for these initial values because it never reaches one.
@@ -195,7 +195,7 @@ collatzConjectureWithAssert(-6)
 Try running `collatzConjectureWithAssert` with a floating point number (e.g. 6.6).
 Does the sequence finally reach one?
 Digress to *floating point precision*?
-I'm not sure about this --- maybe just get them to add an assert statement?
+I'm not sure about this. Maybe just get them to add an assert statement?
 
 # Miscellaneous
 Could include these, or not if this is already too long.
