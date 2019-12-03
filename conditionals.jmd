@@ -1,5 +1,10 @@
-# Control flow
-## Problem statement: Collatz conjecture
+---
+title : Control Flow
+author : fxquah
+date: 3rd December 2019
+---
+
+# Problem statement: Collatz conjecture
 Consider the following operation on a **postive integer**:
 * If the number is even, divide by two.
 * If the number is odd, multiply by three and add one.
@@ -16,12 +21,12 @@ Eccentric Hungarian mathematician Paul Erdős once said about the conjecture:
 As of 2017, the conjecture has been checked by computers to hold true 
 for starting values up to $87 \times 2^{60}$.
 
-## Introduction to control flow
+# Introduction to control flow
 Despite the challenges to obtain a mathematical proof,
 the Collatz conjecture is a useful problem to learn basic control flow in Julia.
 **Control flow** concerns the order in which individual lines of code within a program are executed.
 
-### Conditional evaluation
+## Conditional evaluation
 For this problem, we want our program to perform different operations depending on
 whether the integer is positive or negative.
 We can achieve this behaviour using the `if-else` conditional syntax:
@@ -39,7 +44,7 @@ This can be written as a one-liner using the **ternary operator**.
 x%2==0 ? x/2 : 3x+1
 ```
 
-### Repeated evaluation: while
+## Repeated evaluation: while
 We want the above operations to be repeatedly evaluated until we reach one, so we put them within a `while` loop.
 As long as the number does not equal one (`x != 1`), the body of the loop keeps evaluating.
 To tidy things up, we wrap everything inside a function that also prints the current number per iteration.
@@ -87,7 +92,7 @@ It is, however, worth bearing in mind that the converse is not true:
 any variables defined within the `while` loop would instead be within a **local scope**,
 and thus cannot be accessed by the parent.
 
-### Repeated evaluation: for
+## Repeated evaluation: for
 Let's rewrite the function so that only the stopping time (i.e. the final value of `counter`) is returned.
 ```julia
 function collatzConjectureFinalCount(x::Int64)
@@ -120,14 +125,15 @@ which occurs at initial values of 18 and 19, as found by `findall(counts .== max
 
 In a later section, you will learn how to visualise the distribution of stopping times using plots.
 
-### Exercises
+## Exercises
 1. What is the stopping time for an initial value of 1?
 2. If we were to allow the sequence to proceed even after reaching one, what would happen?
 3. Suppose we modify the operations such that when we reach an odd number, we do $3x-1$ (instead of plus one).
    What happens? Try this for initial values 1, 3 and 9.
    You can modify the code above (hint: use Ctrl+C to halt a program if necessary).
 
-## More advanced control flow
+# More advanced control flow
+## the break statement
 From Question 3, one noticed that if the rule is modified such that
 we do $3x-1$ (instead of plus one) when reaching an odd number,
 there are certain initial values which do not reach one and get trapped in a cycle.
@@ -160,9 +166,11 @@ end
 collatzConjectureWithCounterModified(9)
 ```
 
-*Exercise:* How many numbers from 1 to 20 manage to reach one using the modified rule?
+### Exercise
+How many numbers from 1 to 20 manage to reach one using the modified rule?
 Tip: use a conditional statement to return True/False near the end of the function.
 
+## Dealing with exceptions with @assert
 Those who are eagle-eyed would also notice that the original `collatzConjecture`
 would loop forever if given zero or a negative number.
 Ideally, we wouldn't want this function to run if the input were a negative integer.
@@ -183,7 +191,7 @@ end
 collatzConjectureWithAssert(-6)
 ```
 
-## Miscellaneous
+# Miscellaneous
 Could include these, or not if this is already too long.
 
 1. elseif
