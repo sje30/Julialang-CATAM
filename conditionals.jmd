@@ -15,7 +15,7 @@ The Collatz conjecture states that:
 Eccentric Hungarian mathematician Paul Erdős once said about the conjecture: 
 "Mathematics may not be ready for such problems", and offered US\$500 for its solution.
 As of 2017, the conjecture has been checked by computers to hold true 
-for starting values up to $87 x 2^{60}$.
+for starting values up to $87 \times 2^{60}$.
 
 ## Introduction to control flow
 Despite the challenges to obtain a mathematical proof,
@@ -24,10 +24,10 @@ the Collatz conjecture is a useful problem to learn basic control flow in Julia.
 
 ### Conditional evaluation
 For this problem, we want our program to perform different operations depending on
-whether the integer is currently positive or negative.
+whether the integer is positive or negative.
 We can achieve this behaviour using the `if-else` conditional syntax:
 ```julia
-x = 7  # let's start with seven
+x = 6
 if x % 2 == 0
 	x / 2   # even
 else
@@ -40,15 +40,14 @@ This can be written as a one-liner using the **ternary operator**.
 x%2==0 ? x/2 : 3x+1
 ```
 
-### Repeated evaluation
-Obviously, we want the above operation to continue until we reach one.
-Wrap the above in a `while` loop (repeated evaluation).
+### Repeated evaluation: while
+We want the above operations to be repeatedly evaluated until we reach one, so we put them within a `while` loop.
+As long as the number does not equal one (`x != 1`), the body of the loop keeps evaluating.
+To tidy things up, we wrap everything inside a function that also prints the current number per iteration.
 
 ```julia
-using Printf  # load package
-
+using Printf
 function collatzConjecture(x::Int64)
-	@assert x > 0 "x should be a positive integer!"
 	@printf "starting number is %.0f\n\n" x
 	while x != 1
 		@printf "%.0f\n" x
@@ -57,67 +56,83 @@ function collatzConjecture(x::Int64)
 	@printf "1\n"
 end
 
-collatzConjecture(7)
+collatzConjecture(6)
 ```
 
-Scoping. Can update parent scope (but parent scope cannot access local variable).
+We are also interested to know the stopping time,
+so let's add a `counter` to track the number of iterations the loop has been run.
 
-This leaky behaviour is not the case for `for`, `while` and `try`, 
-which introduc new scopes. (see another document?)
+We initialise its value as `1` right before the `while` loop, update it by one (`counter += 1`) per iteration, 
+and print its final value when the loop exits.
 
 ```julia
-function collatzConjectureWithTerm(x)
-	@assert x > 0 "x should be a positive integer!"
+function collatzConjectureWithCounter(x)
 	@printf "starting number is %.0f\n\n" x
-	count = 1
+	counter = 1
 	while x != 1
-		@printf "term %.0f: %.0f\n" count x
+		@printf "term %.0f: %.0f\n" counter x
 		x = x%2==0 ? x/2 : 3x+1
-		count += 1
+		counter += 1
 	end
-	@printf "\nfinal term of 1 is reached, stopping time is %.0f\n" count
+	@printf "\nfinal term of 1 is reached, stopping time is %.0f\n" counter
 end
 
-collatzConjectureWithTerm(7)
+collatzConjectureWithCounter(6)
 ```
 
-for loop
+*Technical note.* The `counter` variable is first defined 
+in the **parent scope** of the `while` loop (i.e. the `collatzConjectureWithTerm` function).
+Notice how it is possible for the loop to modify the value of `counter`.
+On a more general note, `while`, `for` and `try` can modify variables in their parent scope.
+It is, however, worth bearing in mind that the converse is not true:
+any variables defined within the `while` loop would instead be within a **local scope**,
+and thus cannot be accessed by the parent.
+
+### Repeated evaluation: for
+Let's rewrite the function so that only the stopping time (i.e. the final value of `counter`) is returned.
 ```julia
-function collatzConjectureCount(x)
+function collatzConjectureFinalCount(x)
 	@assert x > 0 "x should be a positive integer!"
-	count = 1
+	counter = 1
 	while x != 1
 		x = x%2==0 ? x/2 : 3x+1
-		count += 1
+		counter += 1
 	end
-	return count
+	return counter
 end
 
-collatzConjectureCount(7)
-
-# what is the stopping time for the first 20 numbers?
-for i in 1:20
-	@printf "%.0f, t = %.0f\n" i collatzConjectureCount(i)
-end
+collatzConjectureFinalCount(6)
 ```
 
-List comprehension method
+Let's use a `for` loop to obtain the stopping time for the first twenty numbers.
 ```julia
-g = [collatzConjectureCount(i) for i in 1:20]  #generator with collect?
-maximum(g)
-findall(g .== maximum(g))
+for i in 1:20
+	@printf "%.0f, t = %.0f\n" i collatzConjectureFinalCount(i)
+end
 ```
 
-You will learn how to visualise the distribution of this with plots.
+A neat one-liner to gather all these values in an Array is by a **list comprehension**:
+```julia
+counts = [collatzConjectureFinalCount(i) for i in 1:20]
+#maximum(g)
+#findall(g .== maximum(g))
+```
+
+The maximum stopping time for the first twenty numbers is `maximum(counts)= ` `j maximum(counts)`,
+which occurs at initial values of 18 and 19, as found by `findall(counts .== maximum(counts))`.
+
+In a later section, you will learn how to visualise the distribution of stopping times using plots.
 
 ### Exercises
-1. What is the stopping time for 1?
-2. If we were to allow the sequence to continue pass one, what happens?
-3. Suppose we modify the conjecture such that when we reach an odd number, we do 3n-1.
-   What happens? Try this for 1, 3 and 9.
-   You can modify the code above and rerun it (hint: use Ctrl+C to halt a program if necessary).
+1. What is the stopping time for an initial value of 1?
+2. If we were to allow the sequence to proceed even after reaching one, what would happen?
+3. Suppose we modify the operations such that when we reach an odd number, we do $3x-1$ instead of plus one.
+   What happens? Try this for initial values 1, 3 and 9.
+   You can modify the code above (hint: use Ctrl+C to halt a program if necessary).
 
 ## More advanced control flow
+Building from Question 3 in the exercises, one will notice that the 
+
 `break` with `while` to stop things from running forever
 
 `continue`
