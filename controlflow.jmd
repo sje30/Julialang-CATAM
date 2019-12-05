@@ -29,7 +29,10 @@ the Collatz conjecture is a useful problem to learn basic control flow in Julia.
 ## Conditional evaluation
 For this problem, we want our program to perform different operations depending on
 whether the integer is positive or negative.
-We can achieve this behaviour using the `if-else` conditional syntax:
+We can achieve this behaviour using the `if-else` conditional syntax.
+Julia first evaluates whether the statement following `if` is true (`x % 2 == 0`).
+If so (i.e. `x` is even), it runs the corresponding code block (`x/2`).
+Otherwise (i.e. `x` is odd), and it runs the code block for `else`.
 ```julia
 x = 6
 if x % 2 == 0
@@ -174,7 +177,7 @@ Tip: use a conditional statement to return True/False near the end of the functi
 Those who are eagle-eyed would also notice that the original `collatzConjecture`
 would loop forever if given zero or a negative number.
 Ideally, we wouldn't want this function to run if the input were a negative integer.
-t should throw an **exception** and print an error message.
+It should throw an **exception** and print an error message.
 We achieve this with the `@assert` macro.
 
 ```julia
@@ -231,7 +234,7 @@ println("x is ", statement)
 
 Solution: you need a `else sign = "zero"`, because all possible code paths must define a value for the variable.
 
-if is "leaky". Notice how the `relation` variable can be used outside the `if`blocj where it was declared.
+`if` is \`\`leaky". Notice how the `relation` variable can be used outside the `if` block where it was declared.
 
 ```julia
 x = -1
